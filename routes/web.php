@@ -9,8 +9,9 @@ Route::get('/', function () {
 
 Route::get('/test-cache', function () {
     $value = Cache::remember('test_key', now()->addMinutes(5), function () {
-        return 'Generated at ' . now();
+        return now();
     });
 
-    return "Value: {$value}";
+
+    return view('time', compact('value'));
 });
