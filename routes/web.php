@@ -46,7 +46,3 @@ Route::get('/users', function () {
 //     return view('users', compact('count', 'queryCount'));
 // });
 
-
-
-// Question: Why it shows '3' queries first? 
-// Check the Cache driver
