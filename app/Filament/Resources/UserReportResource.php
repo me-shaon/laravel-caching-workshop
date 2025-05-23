@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources;
 
+use App\Components\CacheKey;
 use App\Filament\Resources\UserReportResource\Pages;
 use App\Models\UserReport;
 use Filament\Forms\Components\DateTimePicker;
@@ -15,7 +16,9 @@ use Filament\Infolists\Infolist;
 use Filament\Resources\Resource;
 use Filament\Tables\Table;
 use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Columns\IconColumn;
 use Filament\Tables\Filters\SelectFilter;
+use Illuminate\Support\Facades\Cache;
 
 class UserReportResource extends Resource
 {
@@ -34,6 +37,24 @@ class UserReportResource extends Resource
                         'harassment' => 'danger',
                         'inappropriate' => 'warning',
                         default => 'info',
+                    }),
+                IconColumn::make('is_locked')
+                    ->label('Locked')
+                    ->boolean()
+                    ->getStateUsing(function (UserReport $record): bool {
+                        $lockInfo = Cache::get(CacheKey::reportReviewLock($record->id));
+                        return $lockInfo !== null;
+                    })
+                    ->trueIcon('heroicon-o-lock-closed')
+                    ->falseIcon('heroicon-o-lock-open')
+                    ->trueColor('danger')
+                    ->falseColor('success'),
+                TextColumn::make('reviewing_user')
+                    ->label('Currently Reviewing')
+                    ->getStateUsing(function (UserReport $record): ?string {
+                        $lockInfo = Cache::get(CacheKey::reportReviewLock($record->id));
+                        if (!$lockInfo) return null;
+                        return \App\Models\User::find($lockInfo['user_id'])?->name;
                     }),
                 TextColumn::make('reporter.name')
                     ->searchable(),

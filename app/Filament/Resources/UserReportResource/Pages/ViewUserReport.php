@@ -2,14 +2,42 @@
 
 namespace App\Filament\Resources\UserReportResource\Pages;
 
+use App\Components\CacheKey;
 use App\Filament\Resources\UserReportResource;
+use App\Models\User;
+use App\Models\UserReport;
 use Filament\Actions;
 use Filament\Resources\Pages\ViewRecord;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Cache;
 
 class ViewUserReport extends ViewRecord
 {
     protected static string $resource = UserReportResource::class;
+
+    public function mount($record): void
+    {
+        parent::mount($record);
+
+        $report = UserReport::findOrFail($record);
+        
+        $lockKey = CacheKey::reportReviewLock($report->id);
+        $lockInfo = Cache::get($lockKey);
+
+        // If the report is locked by another user
+        if ($lockInfo && $lockInfo['user_id'] !== auth()->id()) {
+            $reviewerName = User::find($lockInfo['user_id'])?->name;
+            $this->notify('warning', "This report is currently being reviewed by {$reviewerName}");
+            $this->redirect(static::getResource()::getUrl('index'));
+            return;
+        }
+
+        // Set or refresh the lock for the current user
+        Cache::put($lockKey, [
+            'user_id' => auth()->id(),
+            'locked_at' => now(),
+        ], now()->addMinutes(10));
+    }
 
     protected function getHeaderActions(): array
     {
@@ -25,6 +53,8 @@ class ViewUserReport extends ViewRecord
                         'reviewed_at' => Carbon::now(),
                     ]);
                     
+                    // Remove the lock when approved
+                    Cache::forget(CacheKey::reportReviewLock($this->record->id));
                     $this->notify('success', 'Report approved successfully');
                 })
                 ->requiresConfirmation()
@@ -44,6 +74,8 @@ class ViewUserReport extends ViewRecord
                         'reviewed_at' => Carbon::now(),
                     ]);
                     
+                    // Remove the lock when rejected
+                    Cache::forget(CacheKey::reportReviewLock($this->record->id));
                     $this->notify('success', 'Report rejected successfully');
                 })
                 ->requiresConfirmation()
