@@ -9,8 +9,10 @@
         <script src="https://cdn.tailwindcss.com"></script>
     </head>
     <body class="antialiased">
-        <div class="min-h-screen flex items-center justify-center">
+        <div class="bg-gray-100 min-h-screen flex items-center justify-center">
             @yield('content')
         </div>
+
+        @stack('scripts')
     </body>
 </html>
