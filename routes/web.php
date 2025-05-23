@@ -89,8 +89,8 @@ Route::get('/api/top-articles', function () {
 // });
 
 Route::get('/blog/{article}', function (Article $article) {
-    // Increment view count
-    $article->increment('view_count');
+    // Use cache to track view count
+    Cache::increment(CacheKey::articleViews($article->id));
     
     // Add this article id in the cache for the current user using session id 
     $sessionId = session()->getId();

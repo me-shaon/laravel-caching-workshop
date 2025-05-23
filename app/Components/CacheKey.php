@@ -13,4 +13,9 @@ class CacheKey
     {
         return 'viewed-articles-' . $sessionId;
     }
+
+    public static function articleViews($articleId): string
+    {
+        return 'article-views-'. $articleId;
+    }
 }
