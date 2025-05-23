@@ -2,8 +2,10 @@
 
 namespace App\Providers;
 
+use App\Auth\CustomEloquentProvider;
 use Illuminate\Cache\Events\CacheHit;
 use Illuminate\Cache\Events\CacheMissed;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\ServiceProvider;
@@ -30,5 +32,9 @@ class AppServiceProvider extends ServiceProvider
         Event::listen(function (CacheMissed $event) {
             Log::info('Cache MISS: ' . $event->key);
         });
+
+        // Auth::provider('eloquent', function () {
+        //     return resolve(CustomEloquentProvider::class);
+        // });
     }
 }
