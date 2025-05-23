@@ -35,6 +35,14 @@
                         <form action="{{ route('events.book', $event) }}" method="POST" class="space-y-6">
                             @csrf
                             <div>
+                                <label for="user_email" class="block text-sm font-medium text-gray-700">Email address</label>
+                                <div class="mt-2">
+                                    <input type="email" name="user_email" id="user_email" 
+                                           class="block w-full rounded-md border-2 border-gray-400 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 text-base py-2 px-3"
+                                           required>
+                                </div>
+                            </div>
+                            <div>
                                 <label for="number_of_tickets" class="block text-sm font-medium text-gray-700">How many tickets would you like?</label>
                                 <div class="mt-2">
                                     <input type="number" name="number_of_tickets" id="number_of_tickets" 

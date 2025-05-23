@@ -18,24 +18,10 @@ class BookingFactory extends Factory
 
         return [
             'event_id' => $event->id,
-            'user_id' => User::factory(),
+            'user_email' => 'test@gmail.com',
             'number_of_tickets' => $tickets,
             'total_amount' => $event->ticket_price * $tickets,
             'status' => fake()->randomElement(['pending', 'confirmed', 'cancelled']),
         ];
-    }
-
-    public function confirmed(): static
-    {
-        return $this->state(fn (array $attributes) => [
-            'status' => 'confirmed',
-        ]);
-    }
-
-    public function cancelled(): static
-    {
-        return $this->state(fn (array $attributes) => [
-            'status' => 'cancelled',
-        ]);
     }
 }

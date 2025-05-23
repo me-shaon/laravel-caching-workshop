@@ -12,7 +12,7 @@ class Booking extends Model
 
     protected $fillable = [
         'event_id',
-        'user_id',
+        'user_email',
         'number_of_tickets',
         'total_amount',
         'status',
@@ -21,10 +21,5 @@ class Booking extends Model
     public function event(): BelongsTo
     {
         return $this->belongsTo(Event::class);
-    }
-
-    public function user(): BelongsTo
-    {
-        return $this->belongsTo(User::class);
     }
 }

@@ -2,10 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Components\CacheKey;
 use App\Models\Event;
 use App\Models\Booking;
+use Illuminate\Contracts\Cache\LockTimeoutException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Cache;
 
 class EventController extends Controller
 {
@@ -26,12 +29,10 @@ class EventController extends Controller
     public function book(Request $request, Event $event)
     {
         $request->validate([
+            'user_email' => ['required', 'email'],
             'number_of_tickets' => ['required', 'integer', 'min:1']
         ]);
 
-        
-
-        return redirect()->route('events.show', $event)
-            ->with('success', 'Booking confirmed successfully!');
+        // TODO
     }
 }
