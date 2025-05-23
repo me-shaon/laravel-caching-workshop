@@ -42,3 +42,5 @@ Route::middleware('auth')->group(function () {
 Route::get('/', function () {
     return view('welcome');
 });
+
+// https://dylanbaine.com/read/scaling-laravel-sanctum
