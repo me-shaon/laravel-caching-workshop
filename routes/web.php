@@ -1,5 +1,7 @@
 <?php
 
+use App\Models\Order;
+use App\Models\Product;
 use App\Models\User;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
@@ -19,30 +21,46 @@ Route::get('/', function () {
 // });
 
 
-Route::get('/users', function () {
+Route::get('/dashboard', function () {
     // Enable query logging
     DB::enableQueryLog();
 
-    $count = User::count();
+    $usersCount = User::count();
+
+    $productsCount = Product::count();
+
+    $ordersCount = Order::count();
 
     // Get the number of queries executed
     $queryCount = count(DB::getQueryLog());
     
-    return view('users', compact('count', 'queryCount'));
+    return view('dashboard', compact('usersCount', 'productsCount', 'ordersCount', 'queryCount'));
 });
 
-// Route::get('/users', function () {
+
+
+
+// Route::get('/dashboard', function () {
 //     // Enable query logging
 //     DB::enableQueryLog();
 
 //     $ttl = now()->addMinutes(30);
-//     $count = Cache::remember('users-count', $ttl, function() {
+
+//     $usersCount = Cache::remember('users-count', $ttl, function() {
 //         return User::count();
+//     });
+
+//     $productsCount = Cache::remember('products-count', $ttl, function() {
+//         return Product::count();
+//     });
+
+//     $ordersCount = Cache::remember('orders-count', $ttl, function() {
+//         return Order::count();
 //     });
     
 //     // Get the number of queries executed
 //     $queryCount = count(DB::getQueryLog());
     
-//     return view('users', compact('count', 'queryCount'));
+//     return view('dashboard', compact('usersCount', 'productsCount', 'ordersCount', 'queryCount'));
 // });
 

@@ -8,4 +8,14 @@ class CacheKey
     {
         return 'users-count';
     }
+
+    public static function productsCount(): string
+    {
+        return 'products-count';
+    }
+
+    public static function ordersCount(): string
+    {
+        return 'orders-count';
+    }
 }
