@@ -12,7 +12,9 @@
                     @foreach($articles as $article)
                         <article class="bg-white rounded-lg shadow-md p-6">
                             <h2 class="text-2xl font-semibold text-gray-800 mb-4">
-                                {{ $article->title }}
+                                <a href="{{ url('/blog/' . $article->id) }}" class="hover:text-indigo-600 transition-colors">
+                                    {{ $article->title }}
+                                </a>
                             </h2>
                             <p class="text-gray-600 mb-4">
                                 {{ Str::limit($article->content, 200) }}
@@ -62,7 +64,9 @@
                 container.innerHTML = articles.map(article => `
                     <div class="border-b border-gray-200 pb-4 last:border-0">
                         <h3 class="text-lg font-medium text-gray-800 mb-2">
-                            ${article.title}
+                            <a href="/blog/${article.id}" class="hover:text-indigo-600 transition-colors">
+                                ${article.title}
+                            </a>
                         </h3>
                         <span class="text-sm text-gray-500">${article.view_count} views</span>
                     </div>

@@ -8,4 +8,9 @@ class CacheKey
     {
         return 'top-articles';
     }
+
+    public static function viewedArticles($sessionId): string
+    {
+        return 'viewed-articles-' . $sessionId;
+    }
 }

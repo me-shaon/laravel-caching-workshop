@@ -18,7 +18,7 @@ class CacheTopArticles extends Command
 
         $ttl = now()->addDay();
         $topArticles = Article::orderByDesc('view_count')
-            ->take(5)
+            ->take(20)
             ->get();
 
         Cache::put(CacheKey::topArticles(), $topArticles, $ttl);
