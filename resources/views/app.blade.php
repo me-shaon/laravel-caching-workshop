@@ -12,5 +12,6 @@
         <div class="min-h-screen flex items-center justify-center">
             @yield('content')
         </div>
+
     </body>
 </html>
